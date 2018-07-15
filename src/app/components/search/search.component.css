@@ -1,0 +1,12 @@
+input {
+  width: 88%;
+  padding: 6px;
+}
+button {
+  width: 10%;
+  padding: 6px;
+}
+
+agm-map {
+  height: 800px;
+}

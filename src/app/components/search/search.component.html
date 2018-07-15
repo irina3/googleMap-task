@@ -1,0 +1,15 @@
+<div>
+  <input type="text"
+         name="search"
+         placeholder="Event Search" [(ngModel)]="searchContent"/>
+  <button type="button" (click)="search(searchContent)">Search</button>
+</div>
+<agm-map [zoom]="zoom"  [zoomControl]="false" [latitude]="eventsData['location'] && eventsData['location'].latitude" [longitude]="eventsData['location'] && eventsData['location'].longitude" [disableDefaultUI]="false">
+  <agm-marker *ngFor="let marker of markers; let i=index"
+              (markerClick)="clickedMarker(marker, i)"
+              [latitude]="+marker.latitude"
+              [longitude]="+marker.longitude"
+              [markerDraggable]="true"><agm-info-window>{{marker.name}}</agm-info-window></agm-marker>
+</agm-map>
+
+
