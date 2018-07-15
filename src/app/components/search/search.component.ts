@@ -17,6 +17,8 @@ export class SearchComponent implements OnInit {
   venuesIds = [];
   markers = [];
   zoom = 10;
+  lat = 5;
+  lng = 6;
 
   constructor(private eventsService: EventsService) {
   }
