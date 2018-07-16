@@ -1,10 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EventsService} from '../../services/events.service';
-export interface IEvent {
-  pagination: any;
-  events: any;
-  location: any;
-}
 
 @Component({
   selector: 'app-search',
@@ -12,13 +7,15 @@ export interface IEvent {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  eventsData = {};
+  eventsData = {pagination: {}, events: [], location: {latitude: 4, longitude: 5, name: ''}};
   public searchContent: string;
   venuesIds = [];
-  markers = [];
   zoom = 10;
   lat = 5;
   lng = 6;
+  markers = [{latitude: this.lat,
+    longitude: this.lng,
+    name: ''}];
 
   constructor(private eventsService: EventsService) {
   }
@@ -27,9 +24,13 @@ export class SearchComponent implements OnInit {
   }
   search(content?: string) {
     if (content) {
-      this.eventsService.search(this.searchContent).subscribe((resEvents) => this.eventsData = resEvents);
+        this.eventsService.search(this.searchContent).subscribe((resEvents) => {
+          this.eventsData = resEvents;
+          this.lat = this.eventsData['location'].latitude;
+          this.lng = this.eventsData['location'].longitude;
+        });
+
       this.getVenuesId();
-      this.getMarkers();
     } else {
       return;
     }
@@ -37,13 +38,15 @@ export class SearchComponent implements OnInit {
   }
   getVenuesId () {
     this.venuesIds = this.eventsData['events'] && this.eventsData['events'].map(item => item.venue_id);
+    this.getMarkers();
   }
   getMarkers() {
     if (this.venuesIds) {
+      this.markers = [];
       this.venuesIds.forEach((id) => this.eventsService.getEvent(id).subscribe((data: any) => this.markers.push({
         latitude: data.latitude,
         longitude: data.longitude,
-        name: data.name})));
+        name: data.name})))
     }
   }
   clickedMarker(marker, i) {
